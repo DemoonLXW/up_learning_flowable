@@ -1,0 +1,32 @@
+flowable:
+  rest-api-enabled: true
+server:
+  port: 8081
+spring:
+  config:
+    import:
+      - classpath:hide.yml
+  datasource:
+    username: ${datasource.username}
+    password: ${datasource.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: dev
+
+---
+spring:
+  datasource:
+    url: ${datasource.url.dev}
+  config:
+    activate:
+      on-profile: dev
+
+---
+spring:
+  datasource:
+    url: ${datasource.url.pro}
+  config:
+    activate:
+      on-profile: pro
+
+
