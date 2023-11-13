@@ -1,32 +1,51 @@
 flowable:
   rest-api-enabled: true
+
 server:
   port: 8081
 spring:
+  profiles:
+    active: dev
   config:
     import:
       - classpath:hide.yml
+app:
   datasource:
-    username: ${datasource.username}
-    password: ${datasource.password}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  profiles:
-    active: dev
-
+    flowable:
+      username: ${datasource.flowable.username}
+      password: ${datasource.flowable.password}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+      username: ${datasource.jpa.username}
+      password: ${datasource.jpa.password}
+      driver-class-name: com.mysql.cj.jdbc.Driver
 ---
 spring:
-  datasource:
-    url: ${datasource.url.dev}
   config:
     activate:
       on-profile: dev
+    import:
+      - classpath:hide-dev.yml
 
+app:
+  jpa:
+    show-sql: true
+  datasource:
+    jpa:
+      url: ${datasource.jpa.url}
+    flowable:
+      url: ${datasource.flowable.url}
 ---
 spring:
-  datasource:
-    url: ${datasource.url.pro}
   config:
     activate:
       on-profile: pro
+    import:
+      - classpath:hide-pro.yml
 
-
+app:
+  datasource:
+    jpa:
+      url: ${datasource.jpa.url}
+    flowable:
+      url: ${datasource.flowable.url}
