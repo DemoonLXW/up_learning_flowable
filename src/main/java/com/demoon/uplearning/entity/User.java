@@ -15,7 +15,7 @@ import java.util.List;
 public class User {
     @Id
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "account")
     private String account;

@@ -14,7 +14,7 @@ public class ApplicantServiceImpl implements ApplicantService {
     private UserRepository userRepository;
 
     @Override
-    public User getUserByID(Long id) {
+    public User getUserByID(Integer id) {
 
         return userRepository.findById(id).orElseThrow();
     }

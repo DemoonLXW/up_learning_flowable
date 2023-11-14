@@ -18,7 +18,7 @@ public class JpaTests {
     @Transactional
     void queryUser() {
 
-        User user = applicantService.getUserByID(1L);
+        User user = applicantService.getUserByID(1);
         for(UserRole ur:user.getRoles()) {
             System.out.println(ur.getRole());
         }
