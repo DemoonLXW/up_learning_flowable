@@ -1,11 +1,16 @@
 package com.demoon.uplearning.listener;
 
+import com.demoon.uplearning.entity.College;
+import com.demoon.uplearning.entity.Student;
+import com.demoon.uplearning.entity.Teacher;
 import com.demoon.uplearning.service.ApplicantService;
 import com.demoon.uplearning.entity.User;
 import com.demoon.uplearning.utils.ApplicationContextUtils;
+import jakarta.transaction.Transactional;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.delegate.TaskListener;
 import org.flowable.task.service.delegate.DelegateTask;
+import org.springframework.aop.scope.ScopedObject;
 import org.springframework.context.ApplicationContext;
 
 public class ReviewProjectTaskListener implements TaskListener {
@@ -23,6 +28,21 @@ public class ReviewProjectTaskListener implements TaskListener {
         applicantService = ctx.getBean(ApplicantService.class);
     }
 
+
+    public void setTeacherReviewer(String taskID, Integer userID) {
+        User user = applicantService.getUserByID(userID);
+        Student student = user.getStudent();
+        Teacher teacher = student.getTeacher();
+        if (teacher != null) {
+            taskService.setAssignee(taskID, teacher.getUser().getId().toString());
+        } else {
+            College college = student.getClasse().getMajor().getCollege();
+            taskService.addCandidateGroup(taskID, "teacher project viewer"+college.getId().toString());
+        }
+
+    }
+
+    @Transactional
     @Override
     public void notify(DelegateTask delegateTask) {
         Integer userID = (Integer)delegateTask.getVariable("userID");
@@ -34,11 +54,7 @@ public class ReviewProjectTaskListener implements TaskListener {
 
                 switch (eventName) {
                     case EVENTNAME_CREATE:
-                        User user = applicantService.getUserByID(userID);
-                        System.out.println(user);
-//                        System.out.println(user.getRoles());
-                        taskService.setAssignee(delegateTask.getId(), "ui-test-teacher"+userID.toString());
-//                        delegateTask.setAssignee("ui-test-teacher"+userID.toString());
+                        setTeacherReviewer(delegateTask.getId(), userID);
                         break;
                 }
 
@@ -49,7 +65,7 @@ public class ReviewProjectTaskListener implements TaskListener {
 
                 switch (eventName) {
                     case EVENTNAME_CREATE:
-                        delegateTask.setAssignee("ui-test-reviewer"+userID.toString());
+                        taskService.addCandidateGroup(delegateTask.getId(), "platform project reviewer");
                         break;
                 }
 

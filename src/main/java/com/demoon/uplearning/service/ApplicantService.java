@@ -10,11 +10,9 @@ import java.util.List;
 public interface ApplicantService {
     public User getUserByID(Integer id);
 
-    public User getTeacherReviewerByApplicantID(Integer id);
-
-    public List<Role> getRolesByUserID(Integer id);
-
     public void modifyProjectByProjectID(Integer id, Project update);
 
+    public String getTeacherReviewer(Integer collegeID);
 
+    public Boolean isTeacher(Integer userID);
 }

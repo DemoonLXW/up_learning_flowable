@@ -1,11 +1,8 @@
 package com.demoon.uplearning.service.impl;
 
 
+import com.demoon.uplearning.entity.*;
 import com.demoon.uplearning.service.ApplicantService;
-import com.demoon.uplearning.entity.Project;
-import com.demoon.uplearning.entity.Role;
-import com.demoon.uplearning.entity.User;
-import com.demoon.uplearning.entity.UserRole;
 import com.demoon.uplearning.repository.ProjectRepository;
 import com.demoon.uplearning.repository.UserRepository;
 import jakarta.annotation.Resource;
@@ -30,19 +27,6 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
-    public User getTeacherReviewerByApplicantID(Integer id) {
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public List<Role> getRolesByUserID(Integer id) {
-        User user = userRepository.findById(id).orElseThrow();
-
-        return user.getRoles();
-    }
-
-    @Override
     @Transactional
     public void modifyProjectByProjectID(Integer id, Project update) {
         Project origin = projectRepository.findById(id).orElseThrow();
@@ -50,6 +34,24 @@ public class ApplicantServiceImpl implements ApplicantService {
             origin.setReviewStatus(update.getReviewStatus());
         }
         projectRepository.save(origin);
+    }
+
+
+    @Override
+    public String getTeacherReviewer(Integer userID) {
+
+
+
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Boolean isTeacher(Integer userID) {
+
+        User user = userRepository.findById(userID).orElseThrow();
+
+        return user.getTeacher() != null;
     }
 
 

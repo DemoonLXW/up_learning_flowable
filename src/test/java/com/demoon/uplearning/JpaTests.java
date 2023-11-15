@@ -34,26 +34,32 @@ public class JpaTests {
         Student student = studentRepository.findById(1).orElseThrow();
         System.out.println(student);
         System.out.println(student.getUser());
+
         Classe classe = student.getClasse();
         System.out.println(classe);
         Major major = classe.getMajor();
         System.out.println(major);
         College college = major.getCollege();
         System.out.println(college);
+
     }
 
     @Test
     void testProject() {
 
-        Project project = new Project();
-        System.out.println(project.getCreatedTime() == null);
-        System.out.println(project.getReviewStatus() == null);
+        User user = userRepository.findById(4).orElseThrow();
+        System.out.println(user.getTeacher() == null);
+        System.out.println(user.getStudent() == null);
+
 
     }
 
     @Test
     void testDSL() {
-
+//        jpaQueryFactory.from(QCollege.college).
+//                innerJoin(QTeacher.teacher).on(QCollege.college.id.eq(3)).
+//                innerJoin(QUser.user).
+//                innerJoin(QRole.role).on
     }
 
 }

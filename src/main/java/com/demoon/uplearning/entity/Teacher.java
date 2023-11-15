@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity(name = "teacher")
@@ -39,5 +41,9 @@ public class Teacher {
     @JoinColumn(name = "uid")
     @ToString.Exclude
     private User user;
+
+    @OneToMany(mappedBy = "teacher")
+    @ToString.Exclude
+    private List<Student> students = new ArrayList<>();
 
 }

@@ -35,6 +35,8 @@ app:
       url: ${datasource.jpa.url}
     flowable:
       url: ${datasource.flowable.url}
+
+
 ---
 spring:
   config:
@@ -43,9 +45,14 @@ spring:
     import:
       - classpath:hide-pro.yml
 
+logging:
+  file:
+    name: flowable.log
+
 app:
   datasource:
     jpa:
       url: ${datasource.jpa.url}
     flowable:
       url: ${datasource.flowable.url}
+

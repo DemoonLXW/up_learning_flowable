@@ -44,4 +44,9 @@ public class Student {
     @JoinColumn(name = "cid")
     @ToString.Exclude
     private Classe classe;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tid")
+    @ToString.Exclude
+    private Teacher teacher;
 }

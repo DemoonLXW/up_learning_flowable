@@ -1,5 +1,6 @@
 package com.demoon.uplearning.listener;
 
+import com.demoon.uplearning.repository.UserRepository;
 import com.demoon.uplearning.service.ApplicantService;
 import com.demoon.uplearning.entity.Project;
 import com.demoon.uplearning.entity.Role;
@@ -19,8 +20,9 @@ public class ReviewProjectEventExecutionListener implements ExecutionListener {
     public final static String ACT_FAILED = "failed";
 
 // some constants
-    public final static String STATUS_AGREE = "agree";
-    public final static String STATUS_DENY = "deny";
+    public final static String STATUS_PENDING = "1";
+    public final static String STATUS_AGREE = "2";
+    public final static String STATUS_DENY = "3";
 
 //    services
     private final RuntimeService runtimeService;
@@ -40,7 +42,7 @@ public class ReviewProjectEventExecutionListener implements ExecutionListener {
 
 
         Integer userID = (Integer)execution.getVariable("userID");
-        String reviewStatus = (String)execution.getVariable("reviewStatus");
+        Integer reviewStatus = (Integer)execution.getVariable("reviewStatus");
 //        Integer projectID = (Integer)execution.getVariable("projectID");
 
 
@@ -51,9 +53,8 @@ public class ReviewProjectEventExecutionListener implements ExecutionListener {
 
                 switch (eventName) {
                     case EVENTNAME_START:
-                        List<Role> roles = applicantService.getRolesByUserID(userID);
-                        boolean isTeacher = roles.stream().map(Role::getName).toList().contains("teacher");
-                        execution.setVariable("isTeacher", isTeacher);
+                        execution.setVariable("isTeacher", applicantService.isTeacher(userID));
+                        runtimeService.updateBusinessStatus(execution.getProcessInstanceId(), STATUS_PENDING);
                         break;
                 }
 
@@ -63,17 +64,10 @@ public class ReviewProjectEventExecutionListener implements ExecutionListener {
 
                 switch (eventName) {
                     case EVENTNAME_END:
-                        runtimeService.updateBusinessStatus(execution.getProcessInstanceId(), reviewStatus);
+                        runtimeService.updateBusinessStatus(execution.getProcessInstanceId(), reviewStatus.toString());
                         Integer projectID = Integer.parseInt(execution.getProcessInstanceBusinessKey());
                         Project project = new Project();
-                        switch (reviewStatus) {
-                            case STATUS_AGREE:
-                                project.setReviewStatus(2);
-                                break;
-                            case STATUS_DENY:
-                                project.setReviewStatus(3);
-                                break;
-                        }
+                        project.setReviewStatus(reviewStatus);
                         applicantService.modifyProjectByProjectID(projectID, project);
                         break;
                 }
@@ -84,7 +78,11 @@ public class ReviewProjectEventExecutionListener implements ExecutionListener {
 
                 switch (eventName) {
                     case EVENTNAME_END:
-                        runtimeService.updateBusinessStatus(execution.getProcessInstanceId(), reviewStatus);
+                        runtimeService.updateBusinessStatus(execution.getProcessInstanceId(), reviewStatus.toString());
+                        Integer projectID = Integer.parseInt(execution.getProcessInstanceBusinessKey());
+                        Project project = new Project();
+                        project.setReviewStatus(reviewStatus);
+                        applicantService.modifyProjectByProjectID(projectID, project);
                         break;
                 }
 

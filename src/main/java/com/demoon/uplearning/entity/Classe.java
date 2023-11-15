@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Classe {
     @Id
     @Column(name = "id")
-    private String id;
+    private Integer id;
 
     @Column(name = "grade")
     private String grade;

@@ -66,4 +66,14 @@ public class User {
     )
     @ToString.Exclude
     private List<Role> roles = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user")
+    @ToString.Exclude
+    private Teacher teacher;
+
+    @OneToOne(mappedBy = "user")
+    @ToString.Exclude
+    private Student student;
+
+
 }
