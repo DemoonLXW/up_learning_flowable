@@ -1,5 +1,8 @@
 package com.demoon.uplearning.config;
 
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -15,11 +18,17 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.function.Supplier;
 
 @Configuration
 @EnableJpaRepositories({"com.demoon.uplearning.repository"})
 @EnableTransactionManagement
 public class JpaConfig {
+
+//    @Bean
+//    public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
+//        return new JPAQueryFactory(entityManager);
+//    }
 
     @Bean
     @ConfigurationProperties("app.jpa")

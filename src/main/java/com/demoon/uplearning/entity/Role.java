@@ -23,16 +23,16 @@ public class Role {
     private String description;
 
     @Column(name = "created_time")
-    private LocalDateTime created_time;
+    private LocalDateTime createdTime;
 
     @Column(name = "deleted_time")
-    private LocalDateTime deleted_time;
+    private LocalDateTime deletedTime;
 
     @Column(name = "modified_time")
-    private LocalDateTime modified_time;
+    private LocalDateTime modifiedTime;
 
     @Column(name = "is_disabled")
-    private Boolean is_disabled;
+    private Boolean isDisabled;
 
     @OneToMany(
             mappedBy = "role",
@@ -40,5 +40,10 @@ public class Role {
             orphanRemoval = true
     )
     @ToString.Exclude
-    private List<UserRole> users = new ArrayList<>();
+    private List<UserRole> userRole = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "roles")
+    @ToString.Exclude
+    private List<User> users = new ArrayList<>();
+
 }

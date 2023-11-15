@@ -7,10 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@RequiredArgsConstructor
+@Data
 @Entity(name = "user")
 public class User {
     @Id
@@ -36,13 +33,13 @@ public class User {
     private String introduction;
 
     @Column(name = "created_time")
-    private LocalDateTime created_time;
+    private LocalDateTime createdTime;
 
     @Column(name = "deleted_time")
-    private LocalDateTime deleted_time;
+    private LocalDateTime deletedTime;
 
     @Column(name = "modified_time")
-    private LocalDateTime modified_time;
+    private LocalDateTime modifiedTime;
 
     @Column(name = "is_disabled")
     private Boolean is_disabled;
@@ -59,5 +56,14 @@ public class User {
             orphanRemoval = true
     )
     @ToString.Exclude
-    private List<UserRole> roles = new ArrayList<>();
+    private List<UserRole> userRole = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = {@JoinColumn(name = "uid")},
+            inverseJoinColumns = {@JoinColumn(name = "rid")}
+    )
+    @ToString.Exclude
+    private List<Role> roles = new ArrayList<>();
 }
