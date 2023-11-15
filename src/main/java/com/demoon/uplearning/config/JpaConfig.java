@@ -1,6 +1,6 @@
 package com.demoon.uplearning.config;
 
-import com.querydsl.jpa.impl.JPAQuery;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -25,10 +25,10 @@ import java.util.function.Supplier;
 @EnableTransactionManagement
 public class JpaConfig {
 
-//    @Bean
-//    public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
-//        return new JPAQueryFactory(entityManager);
-//    }
+    @Bean
+    public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
+        return new JPAQueryFactory(entityManager);
+    }
 
     @Bean
     @ConfigurationProperties("app.jpa")

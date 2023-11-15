@@ -42,7 +42,7 @@ public class User {
     private LocalDateTime modifiedTime;
 
     @Column(name = "is_disabled")
-    private Boolean is_disabled;
+    private Boolean isDisabled;
 
 //    @ManyToMany(targetEntity = Role.class, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 //    @JoinTable(
