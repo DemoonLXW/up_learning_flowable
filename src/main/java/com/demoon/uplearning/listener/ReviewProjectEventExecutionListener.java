@@ -26,6 +26,8 @@ public final static String ACT_START = "start";
     public final static Integer STATUS_AGREE = 2;
     public final static Integer STATUS_DENY = 3;
 
+    public final static Integer STATUS_TIMEOUT = 4;
+
 //    services
     private final RuntimeService runtimeService;
 
@@ -96,7 +98,7 @@ public final static String ACT_START = "start";
 
                 switch (eventName) {
                     case EVENTNAME_END:
-                        execution.setVariable("reviewStatus", STATUS_DENY);
+                        execution.setVariable("reviewStatus", STATUS_TIMEOUT);
                         Project project = new Project();
                         project.setReviewStatus(STATUS_DENY);
                         applicantService.modifyProjectByProjectID(projectID, project);
