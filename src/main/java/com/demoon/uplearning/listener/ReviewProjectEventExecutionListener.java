@@ -15,14 +15,16 @@ import java.util.List;
 public class ReviewProjectEventExecutionListener implements ExecutionListener {
 
 //    activity id
-    public final static String ACT_START = "start";
+public final static String ACT_START = "start";
+    public final static String ACT_TIMER = "timer";
+    public final static String ACT_TIMEOUT = "timeout";
     public final static String ACT_SUCCEEDED = "succeeded";
     public final static String ACT_FAILED = "failed";
 
 // some constants
-    public final static String STATUS_PENDING = "1";
-    public final static String STATUS_AGREE = "2";
-    public final static String STATUS_DENY = "3";
+    public final static Integer STATUS_PENDING = 1;
+    public final static Integer STATUS_AGREE = 2;
+    public final static Integer STATUS_DENY = 3;
 
 //    services
     private final RuntimeService runtimeService;
@@ -42,8 +44,9 @@ public class ReviewProjectEventExecutionListener implements ExecutionListener {
 
 
         Integer userID = (Integer)execution.getVariable("userID");
-        Integer reviewStatus = (Integer)execution.getVariable("reviewStatus");
-//        Integer projectID = (Integer)execution.getVariable("projectID");
+//        Integer reviewStatus = (Integer)execution.getVariable("reviewStatus");
+        Integer projectID = (Integer)execution.getVariable("projectID") ;
+
 
 
 
@@ -54,7 +57,10 @@ public class ReviewProjectEventExecutionListener implements ExecutionListener {
                 switch (eventName) {
                     case EVENTNAME_START:
                         execution.setVariable("isTeacher", applicantService.isTeacher(userID));
-                        runtimeService.updateBusinessStatus(execution.getProcessInstanceId(), STATUS_PENDING);
+                        execution.setVariable("reviewStatus", STATUS_PENDING);
+                        Project project = new Project();
+                        project.setReviewStatus(STATUS_PENDING);
+                        applicantService.modifyProjectByProjectID(projectID, project);
                         break;
                 }
 
@@ -64,8 +70,7 @@ public class ReviewProjectEventExecutionListener implements ExecutionListener {
 
                 switch (eventName) {
                     case EVENTNAME_END:
-                        runtimeService.updateBusinessStatus(execution.getProcessInstanceId(), reviewStatus.toString());
-                        Integer projectID = Integer.parseInt(execution.getProcessInstanceBusinessKey());
+                        Integer reviewStatus = (Integer)execution.getVariable("reviewStatus");
                         Project project = new Project();
                         project.setReviewStatus(reviewStatus);
                         applicantService.modifyProjectByProjectID(projectID, project);
@@ -78,10 +83,22 @@ public class ReviewProjectEventExecutionListener implements ExecutionListener {
 
                 switch (eventName) {
                     case EVENTNAME_END:
-                        runtimeService.updateBusinessStatus(execution.getProcessInstanceId(), reviewStatus.toString());
-                        Integer projectID = Integer.parseInt(execution.getProcessInstanceBusinessKey());
+                        Integer reviewStatus = (Integer)execution.getVariable("reviewStatus");
                         Project project = new Project();
                         project.setReviewStatus(reviewStatus);
+                        applicantService.modifyProjectByProjectID(projectID, project);
+                        break;
+                }
+
+                break;
+
+            case ACT_TIMEOUT:
+
+                switch (eventName) {
+                    case EVENTNAME_END:
+                        execution.setVariable("reviewStatus", STATUS_DENY);
+                        Project project = new Project();
+                        project.setReviewStatus(STATUS_DENY);
                         applicantService.modifyProjectByProjectID(projectID, project);
                         break;
                 }

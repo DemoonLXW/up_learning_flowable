@@ -48,6 +48,8 @@ spring:
 logging:
   file:
     name: flowable.log
+  pattern:
+    console:
 
 app:
   datasource:
