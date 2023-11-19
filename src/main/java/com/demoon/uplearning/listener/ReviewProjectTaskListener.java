@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.delegate.TaskListener;
 import org.flowable.task.service.delegate.DelegateTask;
-import org.springframework.aop.scope.ScopedObject;
 import org.springframework.context.ApplicationContext;
 
 public class ReviewProjectTaskListener implements TaskListener {
@@ -37,7 +36,7 @@ public class ReviewProjectTaskListener implements TaskListener {
             taskService.setAssignee(taskID, teacher.getUser().getId().toString());
         } else {
             College college = student.getClasse().getMajor().getCollege();
-            taskService.addCandidateGroup(taskID, "teacher project viewer"+college.getId().toString());
+            taskService.addCandidateGroup(taskID, "teacher project reviewer"+college.getId().toString());
         }
 
     }
@@ -56,6 +55,10 @@ public class ReviewProjectTaskListener implements TaskListener {
                     case EVENTNAME_CREATE:
                         setTeacherReviewer(delegateTask.getId(), userID);
                         break;
+                    case EVENTNAME_COMPLETE:
+                        Integer reviewStatus = (Integer)delegateTask.getVariable("reviewStatus");
+                        delegateTask.setVariableLocal("action", reviewStatus);
+                        break;
                 }
 
                 break;
@@ -66,6 +69,10 @@ public class ReviewProjectTaskListener implements TaskListener {
                 switch (eventName) {
                     case EVENTNAME_CREATE:
                         taskService.addCandidateGroup(delegateTask.getId(), "platform project reviewer");
+                        break;
+                    case EVENTNAME_COMPLETE:
+                        Integer reviewStatus = (Integer)delegateTask.getVariable("reviewStatus");
+                        delegateTask.setVariableLocal("action", reviewStatus);
                         break;
                 }
 

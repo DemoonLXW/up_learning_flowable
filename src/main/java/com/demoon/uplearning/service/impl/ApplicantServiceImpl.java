@@ -9,6 +9,7 @@ import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,6 +34,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         if(update.getReviewStatus() != null) {
             origin.setReviewStatus(update.getReviewStatus());
         }
+        origin.setModifiedTime(LocalDateTime.now());
         projectRepository.save(origin);
     }
 

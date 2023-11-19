@@ -9,11 +9,13 @@
     <userTask id="teacher-review" name="teacher-review" flowable:formFieldValidation="true">
       <extensionElements>
         <flowable:taskListener event="create" class="com.demoon.uplearning.listener.ReviewProjectTaskListener"></flowable:taskListener>
+        <flowable:taskListener event="complete" class="com.demoon.uplearning.listener.ReviewProjectTaskListener"></flowable:taskListener>
       </extensionElements>
     </userTask>
     <userTask id="platform-reviewer-review" name="platform-reviewer-review" flowable:formFieldValidation="true">
       <extensionElements>
         <flowable:taskListener event="create" class="com.demoon.uplearning.listener.ReviewProjectTaskListener"></flowable:taskListener>
+        <flowable:taskListener event="complete" class="com.demoon.uplearning.listener.ReviewProjectTaskListener"></flowable:taskListener>
       </extensionElements>
     </userTask>
     <endEvent id="succeeded" name="succeeded">
@@ -21,15 +23,23 @@
         <flowable:executionListener event="end" class="com.demoon.uplearning.listener.ReviewProjectEventExecutionListener"></flowable:executionListener>
       </extensionElements>
     </endEvent>
-    <endEvent id="failed" name="failed"></endEvent>
+    <endEvent id="failed" name="failed">
+      <extensionElements>
+        <flowable:executionListener event="end" class="com.demoon.uplearning.listener.ReviewProjectEventExecutionListener"></flowable:executionListener>
+      </extensionElements>
+    </endEvent>
     <subProcess id="sid-73ACE7A7-F516-45C2-8E42-1E546E8FAD28" name="subProcess" triggeredByEvent="true">
-      <startEvent id="sid-58C0B6BB-E9DD-4431-AC29-13B463B7A123" isInterrupting="true">
+      <startEvent id="timer" name="timer" isInterrupting="true">
         <timerEventDefinition>
           <timeDate>${dueDate}</timeDate>
         </timerEventDefinition>
       </startEvent>
-      <endEvent id="sid-9435FCB7-9250-4F94-8019-5EAAF1A002F3"></endEvent>
-      <sequenceFlow id="sid-9A65135E-2820-4AF9-AFA4-C9706E4FA008" sourceRef="sid-58C0B6BB-E9DD-4431-AC29-13B463B7A123" targetRef="sid-9435FCB7-9250-4F94-8019-5EAAF1A002F3"></sequenceFlow>
+      <endEvent id="timeout" name="timeout">
+        <extensionElements>
+          <flowable:executionListener event="end" class="com.demoon.uplearning.listener.ReviewProjectEventExecutionListener"></flowable:executionListener>
+        </extensionElements>
+      </endEvent>
+      <sequenceFlow id="sid-9A65135E-2820-4AF9-AFA4-C9706E4FA008" sourceRef="timer" targetRef="timeout"></sequenceFlow>
     </subProcess>
     <exclusiveGateway id="sid-B1C6BEB7-FA01-43B0-911E-AA646B73B23B"></exclusiveGateway>
     <sequenceFlow id="sid-D9709B5A-EF62-412D-B59B-285BE6219E01" sourceRef="start" targetRef="sid-B1C6BEB7-FA01-43B0-911E-AA646B73B23B"></sequenceFlow>
@@ -72,10 +82,10 @@
       <bpmndi:BPMNShape bpmnElement="sid-73ACE7A7-F516-45C2-8E42-1E546E8FAD28" id="BPMNShape_sid-73ACE7A7-F516-45C2-8E42-1E546E8FAD28">
         <omgdc:Bounds height="155.0" width="457.0" x="705.0" y="420.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="sid-58C0B6BB-E9DD-4431-AC29-13B463B7A123" id="BPMNShape_sid-58C0B6BB-E9DD-4431-AC29-13B463B7A123">
+      <bpmndi:BPMNShape bpmnElement="timer" id="BPMNShape_timer">
         <omgdc:Bounds height="31.0" width="31.0" x="739.5" y="484.5"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="sid-9435FCB7-9250-4F94-8019-5EAAF1A002F3" id="BPMNShape_sid-9435FCB7-9250-4F94-8019-5EAAF1A002F3">
+      <bpmndi:BPMNShape bpmnElement="timeout" id="BPMNShape_timeout">
         <omgdc:Bounds height="28.0" width="28.0" x="1066.0" y="486.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="sid-B1C6BEB7-FA01-43B0-911E-AA646B73B23B" id="BPMNShape_sid-B1C6BEB7-FA01-43B0-911E-AA646B73B23B">

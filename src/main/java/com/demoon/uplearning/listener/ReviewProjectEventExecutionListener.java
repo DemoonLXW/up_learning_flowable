@@ -10,6 +10,7 @@ import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.ExecutionListener;
 import org.springframework.context.ApplicationContext;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ReviewProjectEventExecutionListener implements ExecutionListener {
@@ -72,9 +73,8 @@ public final static String ACT_START = "start";
 
                 switch (eventName) {
                     case EVENTNAME_END:
-                        Integer reviewStatus = (Integer)execution.getVariable("reviewStatus");
                         Project project = new Project();
-                        project.setReviewStatus(reviewStatus);
+                        project.setReviewStatus(STATUS_AGREE);
                         applicantService.modifyProjectByProjectID(projectID, project);
                         break;
                 }
@@ -85,9 +85,8 @@ public final static String ACT_START = "start";
 
                 switch (eventName) {
                     case EVENTNAME_END:
-                        Integer reviewStatus = (Integer)execution.getVariable("reviewStatus");
                         Project project = new Project();
-                        project.setReviewStatus(reviewStatus);
+                        project.setReviewStatus(STATUS_DENY);
                         applicantService.modifyProjectByProjectID(projectID, project);
                         break;
                 }
@@ -100,7 +99,7 @@ public final static String ACT_START = "start";
                     case EVENTNAME_END:
                         execution.setVariable("reviewStatus", STATUS_TIMEOUT);
                         Project project = new Project();
-                        project.setReviewStatus(STATUS_DENY);
+                        project.setReviewStatus(STATUS_TIMEOUT);
                         applicantService.modifyProjectByProjectID(projectID, project);
                         break;
                 }
