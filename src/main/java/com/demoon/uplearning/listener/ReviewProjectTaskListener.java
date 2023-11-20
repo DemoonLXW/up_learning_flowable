@@ -17,6 +17,9 @@ public class ReviewProjectTaskListener implements TaskListener {
     public final static String TASK_TEACHER_REVIEW = "teacher-review";
     public final static String TASK_PLATFORM_REVIEWER_REVIEW = "platform-reviewer-review";
 
+    public final static Integer ACTION_AGREE = 0;
+    public final static Integer ACTION_DENY= 1;
+
     private final TaskService taskService;
 
     private final ApplicantService applicantService;
@@ -56,8 +59,10 @@ public class ReviewProjectTaskListener implements TaskListener {
                         setTeacherReviewer(delegateTask.getId(), userID);
                         break;
                     case EVENTNAME_COMPLETE:
-                        Integer reviewStatus = (Integer)delegateTask.getVariable("reviewStatus");
-                        delegateTask.setVariableLocal("action", reviewStatus);
+                        Integer action = (Integer)delegateTask.getVariable("action");
+                        Integer reviewer = (Integer)delegateTask.getVariable("reviewer");
+                        delegateTask.setVariableLocal("action", action);
+                        delegateTask.setVariableLocal("reviewer", reviewer);
                         break;
                 }
 
@@ -71,8 +76,10 @@ public class ReviewProjectTaskListener implements TaskListener {
                         taskService.addCandidateGroup(delegateTask.getId(), "platform project reviewer");
                         break;
                     case EVENTNAME_COMPLETE:
-                        Integer reviewStatus = (Integer)delegateTask.getVariable("reviewStatus");
-                        delegateTask.setVariableLocal("action", reviewStatus);
+                        Integer action = (Integer)delegateTask.getVariable("action");
+                        Integer reviewer = (Integer)delegateTask.getVariable("reviewer");
+                        delegateTask.setVariableLocal("action", action);
+                        delegateTask.setVariableLocal("reviewer", reviewer);
                         break;
                 }
 

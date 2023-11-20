@@ -43,23 +43,23 @@
     </subProcess>
     <exclusiveGateway id="sid-B1C6BEB7-FA01-43B0-911E-AA646B73B23B"></exclusiveGateway>
     <sequenceFlow id="sid-D9709B5A-EF62-412D-B59B-285BE6219E01" sourceRef="start" targetRef="sid-B1C6BEB7-FA01-43B0-911E-AA646B73B23B"></sequenceFlow>
-    <sequenceFlow id="sid-B516007D-BE73-4B6A-84B0-90217611A12F" sourceRef="platform-reviewer-review" targetRef="failed">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${3==reviewStatus}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="sid-F48BB6A0-3E29-42DD-B166-F80938D220F6" sourceRef="teacher-review" targetRef="failed">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${3==reviewStatus}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="sid-CD780A1A-CE92-4EC5-8509-4EBE3D55EC24" sourceRef="platform-reviewer-review" targetRef="succeeded">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${2==reviewStatus}]]></conditionExpression>
+    <sequenceFlow id="sid-4909EA54-64A9-4FE6-8ADF-983A9182FDD4" sourceRef="sid-B1C6BEB7-FA01-43B0-911E-AA646B73B23B" targetRef="platform-reviewer-review">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isTeacher==true}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sid-9770BCC6-6444-4771-B356-32F11D5579CD" sourceRef="teacher-review" targetRef="platform-reviewer-review">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${2==reviewStatus}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${0==action}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-CD780A1A-CE92-4EC5-8509-4EBE3D55EC24" sourceRef="platform-reviewer-review" targetRef="succeeded">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${0==action}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-B516007D-BE73-4B6A-84B0-90217611A12F" sourceRef="platform-reviewer-review" targetRef="failed">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${1==action}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-F48BB6A0-3E29-42DD-B166-F80938D220F6" sourceRef="teacher-review" targetRef="failed">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${1==action}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sid-48721B84-0A8C-48A4-B077-46C988A7F2EC" sourceRef="sid-B1C6BEB7-FA01-43B0-911E-AA646B73B23B" targetRef="teacher-review">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isTeacher==false}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="sid-4909EA54-64A9-4FE6-8ADF-983A9182FDD4" sourceRef="sid-B1C6BEB7-FA01-43B0-911E-AA646B73B23B" targetRef="platform-reviewer-review">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isTeacher==true}]]></conditionExpression>
     </sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_review-project">

@@ -24,8 +24,8 @@ public final static String ACT_START = "start";
 
 // some constants
     public final static Integer STATUS_PENDING = 1;
-    public final static Integer STATUS_AGREE = 2;
-    public final static Integer STATUS_DENY = 3;
+    public final static Integer STATUS_SUCCEEDED = 2;
+    public final static Integer STATUS_FAILED = 3;
 
     public final static Integer STATUS_TIMEOUT = 4;
 
@@ -74,7 +74,7 @@ public final static String ACT_START = "start";
                 switch (eventName) {
                     case EVENTNAME_END:
                         Project project = new Project();
-                        project.setReviewStatus(STATUS_AGREE);
+                        project.setReviewStatus(STATUS_SUCCEEDED);
                         applicantService.modifyProjectByProjectID(projectID, project);
                         break;
                 }
@@ -86,7 +86,7 @@ public final static String ACT_START = "start";
                 switch (eventName) {
                     case EVENTNAME_END:
                         Project project = new Project();
-                        project.setReviewStatus(STATUS_DENY);
+                        project.setReviewStatus(STATUS_FAILED);
                         applicantService.modifyProjectByProjectID(projectID, project);
                         break;
                 }
